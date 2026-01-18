@@ -1,0 +1,108 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Turnamen {
+    private String id;
+    private String nama;
+    private Game game;
+    private double hadiah;
+    private String status;
+    private List<Peserta> daftarPeserta;
+
+    public Turnamen(String id, String nama, Game game, double hadiah) {
+        this.id = id;
+        this.nama = nama;
+        this.game = game;
+        this.hadiah = hadiah;
+        this.status = "PENDAFTARAN";
+        this.daftarPeserta = new ArrayList<>();
+    }
+
+    // ENKAPSULASI: Getter methods
+    public String getId() { return id; }
+    public String getNama() { return nama; }
+    public Game getGame() { return game; }
+    public double getHadiah() { return hadiah; }
+    public String getStatus() { return status; }
+    public List<Peserta> getDaftarPeserta() { return daftarPeserta; }
+
+    // Method untuk mendaftarkan peserta
+    public boolean daftarkanPeserta(Peserta peserta) {
+        // Cek apakah peserta sudah terdaftar
+        for (Peserta p : daftarPeserta) {
+            if (p.getId().equals(peserta.getId())) {
+                return false;
+            }
+        }
+        daftarPeserta.add(peserta);
+        return true;
+    }
+
+    // Method untuk menghapus peserta
+    public boolean hapusPeserta(String idPeserta) {
+        for (int i = 0; i < daftarPeserta.size(); i++) {
+            if (daftarPeserta.get(i).getId().equals(idPeserta)) {
+                daftarPeserta.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Method untuk memulai turnamen
+    public void mulaiTurnamen() {
+        if (daftarPeserta.size() >= 2) {
+            status = "BERLANGSUNG";
+        }
+    }
+
+    // Method untuk menyelesaikan turnamen
+    public void selesaikanTurnamen(String idPemenang) {
+        for (Peserta p : daftarPeserta) {
+            if (p.getId().equals(idPemenang)) {
+                p.tambahKemenangan();
+                break;
+            }
+        }
+        status = "SELESAI";
+    }
+
+    // Method untuk menampilkan info turnamen
+    public void tampilkanInfo() {
+        System.out.println("=========================================");
+        System.out.println("TURNAMEN: " + nama);
+        System.out.println("Game    : " + game.getNama());
+        System.out.println("Hadiah  : Rp" + hadiah);
+        System.out.println("Status  : " + status);
+        System.out.println("Peserta : " + daftarPeserta.size() + " orang");
+        System.out.println("=========================================");
+    }
+
+    // Method untuk menampilkan bracket
+    public void tampilkanBracket() {
+        System.out.println("========== BRACKET TURNAMEN ==========");
+        System.out.println("Turnamen: " + nama);
+        System.out.println("Game    : " + game.getNama());
+
+        if (daftarPeserta.isEmpty()) {
+            System.out.println("Belum ada peserta terdaftar");
+            return;
+        }
+
+        System.out.println("\nDaftar Peserta:");
+        for (int i = 0; i < daftarPeserta.size(); i++) {
+            System.out.println((i+1) + ". " + daftarPeserta.get(i).getNama());
+        }
+
+        if (status.equals("BERLANGSUNG") && daftarPeserta.size() >= 2) {
+            System.out.println("\nJadwal Pertandingan:");
+            for (int i = 0; i < daftarPeserta.size(); i += 2) {
+                if (i + 1 < daftarPeserta.size()) {
+                    System.out.println("Match: " + daftarPeserta.get(i).getNama() +
+                            " vs " + daftarPeserta.get(i+1).getNama());
+                }
+            }
+        }
+        System.out.println("========================================");
+    }
+}
