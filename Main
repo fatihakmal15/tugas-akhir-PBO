@@ -1,0 +1,521 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+    // Data yang sudah ada di awal
+    private static List<Peserta> semuaPeserta = new ArrayList<>();
+    private static List<Turnamen> semuaTurnamen = new ArrayList<>();
+    private static List<Game> semuaGame = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        System.out.println("=========================================");
+        System.out.println(" SISTEM MANAJEMEN TURNAMEN PLAYSTATION");
+        System.out.println("=========================================");
+
+        // Inisialisasi data yang sudah ada
+        inisialisasiData();
+
+        // Tampilkan data yang sudah ada
+        tampilkanDataAwal();
+
+        // Jalankan menu utama
+        menuUtama();
+
+        scanner.close();
+    }
+
+    private static void inisialisasiData() {
+        // Data Game yang sudah ada
+        semuaGame.add(new Game("EA Sports FC 25", "Sepak Bola", 4, "Single Elimination"));
+        semuaGame.add(new Game("Tekken 8", "Fighting", 2, "Double Elimination"));
+        semuaGame.add(new Game("Call of Duty", "FPS", 5, "Round Robin"));
+
+        // Data Peserta yang sudah ada
+        semuaPeserta.add(new Peserta("P001", "Budi Santoso", "BudiPro", "Platinum"));
+        semuaPeserta.add(new Peserta("P002", "Siti Aminah", "SitiGamer", "Diamond"));
+        semuaPeserta.add(new Peserta("P003", "Andi Wijaya", "AndiMaster", "Gold"));
+        semuaPeserta.add(new Peserta("P004", "Rina Melati", "RinaPlayer", "Silver"));
+        semuaPeserta.add(new Peserta("P005", "Dodi Pratama", "DodiPS5", "Bronze"));
+
+        // Data Turnamen yang sudah ada
+        semuaTurnamen.add(new Turnamen("T001", "FIFA Championship", semuaGame.get(0), 10000000));
+        semuaTurnamen.add(new Turnamen("T002", "Tekken Tournament", semuaGame.get(1), 5000000));
+
+        // Daftarkan beberapa peserta ke turnamen yang sudah ada
+        semuaTurnamen.get(0).daftarkanPeserta(semuaPeserta.get(0)); // Budi ke FIFA
+        semuaTurnamen.get(0).daftarkanPeserta(semuaPeserta.get(1)); // Siti ke FIFA
+        semuaTurnamen.get(1).daftarkanPeserta(semuaPeserta.get(2)); // Andi ke Tekken
+        semuaTurnamen.get(1).daftarkanPeserta(semuaPeserta.get(3)); // Rina ke Tekken
+    }
+
+    private static void tampilkanDataAwal() {
+        System.out.println("\n=== DATA YANG SUDAH ADA ===");
+
+        System.out.println("\n1. DAFTAR GAME:");
+        for (Game game : semuaGame) {
+            game.tampilkanInfo();
+        }
+
+        System.out.println("\n2. DAFTAR PESERTA (" + semuaPeserta.size() + " orang):");
+        for (Peserta peserta : semuaPeserta) {
+            peserta.tampilkanInfo();
+        }
+
+        System.out.println("\n3. DAFTAR TURNAMEN (" + semuaTurnamen.size() + " turnamen):");
+        for (Turnamen turnamen : semuaTurnamen) {
+            turnamen.tampilkanInfo();
+        }
+    }
+
+    private static void menuUtama() {
+        boolean running = true;
+
+        while (running) {
+            System.out.println("\n========== MENU UTAMA ==========");
+            System.out.println("1. Lihat Semua Data");
+            System.out.println("2. Kelola Peserta");
+            System.out.println("3. Kelola Turnamen");
+            System.out.println("4. Mulai/Selesaikan Turnamen");
+            System.out.println("5. Tampilkan Bracket");
+            System.out.println("6. Keluar");
+            System.out.println("================================");
+            System.out.print("Pilihan: ");
+
+            int pilihan = Integer.parseInt(scanner.nextLine());
+
+            switch (pilihan) {
+                case 1:
+                    tampilkanSemuaData();
+                    break;
+                case 2:
+                    menuKelolaPeserta();
+                    break;
+                case 3:
+                    menuKelolaTurnamen();
+                    break;
+                case 4:
+                    menuKontrolTurnamen();
+                    break;
+                case 5:
+                    tampilkanBracketMenu();
+                    break;
+                case 6:
+                    running = false;
+                    System.out.println("Terima kasih telah menggunakan sistem!");
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid!");
+            }
+        }
+    }
+
+    private static void tampilkanSemuaData() {
+        System.out.println("\n=== SEMUA DATA SISTEM ===");
+
+        System.out.println("\n1. DAFTAR GAME (" + semuaGame.size() + " game):");
+        for (int i = 0; i < semuaGame.size(); i++) {
+            System.out.println((i+1) + ". " + semuaGame.get(i).getNama());
+        }
+
+        System.out.println("\n2. DAFTAR PESERTA (" + semuaPeserta.size() + " orang):");
+        for (int i = 0; i < semuaPeserta.size(); i++) {
+            System.out.print((i+1) + ". ");
+            semuaPeserta.get(i).tampilkanInfo();
+        }
+
+        System.out.println("\n3. DAFTAR TURNAMEN (" + semuaTurnamen.size() + " turnamen):");
+        for (int i = 0; i < semuaTurnamen.size(); i++) {
+            System.out.print((i+1) + ". ");
+            semuaTurnamen.get(i).tampilkanInfo();
+        }
+    }
+
+    private static void menuKelolaPeserta() {
+        boolean kembali = false;
+
+        while (!kembali) {
+            System.out.println("\n=== KELOLA PESERTA ===");
+            System.out.println("1. Tambah Peserta Baru");
+            System.out.println("2. Hapus Peserta");
+            System.out.println("3. Lihat Semua Peserta");
+            System.out.println("4. Kembali ke Menu Utama");
+            System.out.print("Pilihan: ");
+
+            int pilihan = Integer.parseInt(scanner.nextLine());
+
+            switch (pilihan) {
+                case 1:
+                    tambahPeserta();
+                    break;
+                case 2:
+                    hapusPeserta();
+                    break;
+                case 3:
+                    tampilkanPeserta();
+                    break;
+                case 4:
+                    kembali = true;
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid!");
+            }
+        }
+    }
+
+    private static void tambahPeserta() {
+        System.out.println("\n=== TAMBAH PESERTA BARU ===");
+
+        System.out.print("ID Peserta: ");
+        String id = scanner.nextLine();
+
+        // Cek apakah ID sudah ada
+        for (Peserta p : semuaPeserta) {
+            if (p.getId().equals(id)) {
+                System.out.println("ID sudah digunakan!");
+                return;
+            }
+        }
+
+        System.out.print("Nama: ");
+        String nama = scanner.nextLine();
+
+        System.out.print("PSN ID: ");
+        String psnId = scanner.nextLine();
+
+        System.out.print("Rank (Bronze/Silver/Gold/Platinum/Diamond): ");
+        String rank = scanner.nextLine();
+
+        Peserta pesertaBaru = new Peserta(id, nama, psnId, rank);
+        semuaPeserta.add(pesertaBaru);
+
+        System.out.println("Peserta berhasil ditambahkan!");
+        pesertaBaru.tampilkanInfo();
+    }
+
+    private static void hapusPeserta() {
+        System.out.println("\n=== HAPUS PESERTA ===");
+
+        if (semuaPeserta.isEmpty()) {
+            System.out.println("Belum ada peserta!");
+            return;
+        }
+
+        tampilkanPeserta();
+
+        System.out.print("Masukkan nomor peserta yang akan dihapus: ");
+        int nomor = Integer.parseInt(scanner.nextLine()) - 1;
+
+        if (nomor >= 0 && nomor < semuaPeserta.size()) {
+            String nama = semuaPeserta.get(nomor).getNama();
+
+            // Hapus dari semua turnamen terlebih dahulu
+            for (Turnamen t : semuaTurnamen) {
+                t.hapusPeserta(semuaPeserta.get(nomor).getId());
+            }
+
+            semuaPeserta.remove(nomor);
+            System.out.println("Peserta " + nama + " berhasil dihapus!");
+        } else {
+            System.out.println("Nomor tidak valid!");
+        }
+    }
+
+    private static void tampilkanPeserta() {
+        System.out.println("\n=== DAFTAR PESERTA ===");
+        for (int i = 0; i < semuaPeserta.size(); i++) {
+            System.out.print((i+1) + ". ");
+            semuaPeserta.get(i).tampilkanInfo();
+        }
+    }
+
+    private static void menuKelolaTurnamen() {
+        boolean kembali = false;
+
+        while (!kembali) {
+            System.out.println("\n=== KELOLA TURNAMEN ===");
+            System.out.println("1. Buat Turnamen Baru");
+            System.out.println("2. Hapus Turnamen");
+            System.out.println("3. Daftarkan Peserta ke Turnamen");
+            System.out.println("4. Hapus Peserta dari Turnamen");
+            System.out.println("5. Lihat Semua Turnamen");
+            System.out.println("6. Kembali ke Menu Utama");
+            System.out.print("Pilihan: ");
+
+            int pilihan = Integer.parseInt(scanner.nextLine());
+
+            switch (pilihan) {
+                case 1:
+                    buatTurnamenBaru();
+                    break;
+                case 2:
+                    hapusTurnamen();
+                    break;
+                case 3:
+                    daftarkanPesertaKeTurnamen();
+                    break;
+                case 4:
+                    hapusPesertaDariTurnamen();
+                    break;
+                case 5:
+                    tampilkanTurnamen();
+                    break;
+                case 6:
+                    kembali = true;
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid!");
+            }
+        }
+    }
+
+    private static void buatTurnamenBaru() {
+        System.out.println("\n=== BUAT TURNAMEN BARU ===");
+
+        System.out.print("ID Turnamen: ");
+        String id = scanner.nextLine();
+
+        // Cek apakah ID sudah ada
+        for (Turnamen t : semuaTurnamen) {
+            if (t.getId().equals(id)) {
+                System.out.println("ID sudah digunakan!");
+                return;
+            }
+        }
+
+        System.out.print("Nama Turnamen: ");
+        String nama = scanner.nextLine();
+
+        // Pilih game
+        System.out.println("\nPilih Game:");
+        for (int i = 0; i < semuaGame.size(); i++) {
+            System.out.println((i+1) + ". " + semuaGame.get(i).getNama());
+        }
+        System.out.print("Pilihan: ");
+        int pilihanGame = Integer.parseInt(scanner.nextLine()) - 1;
+
+        if (pilihanGame < 0 || pilihanGame >= semuaGame.size()) {
+            System.out.println("Pilihan tidak valid!");
+            return;
+        }
+
+        System.out.print("Hadiah (Rp): ");
+        double hadiah = Double.parseDouble(scanner.nextLine());
+
+        Turnamen turnamenBaru = new Turnamen(id, nama, semuaGame.get(pilihanGame), hadiah);
+        semuaTurnamen.add(turnamenBaru);
+
+        System.out.println("Turnamen berhasil dibuat!");
+        turnamenBaru.tampilkanInfo();
+    }
+
+    private static void hapusTurnamen() {
+        System.out.println("\n=== HAPUS TURNAMEN ===");
+
+        if (semuaTurnamen.isEmpty()) {
+            System.out.println("Belum ada turnamen!");
+            return;
+        }
+
+        tampilkanTurnamen();
+
+        System.out.print("Masukkan nomor turnamen yang akan dihapus: ");
+        int nomor = Integer.parseInt(scanner.nextLine()) - 1;
+
+        if (nomor >= 0 && nomor < semuaTurnamen.size()) {
+            String nama = semuaTurnamen.get(nomor).getNama();
+            semuaTurnamen.remove(nomor);
+            System.out.println("Turnamen " + nama + " berhasil dihapus!");
+        } else {
+            System.out.println("Nomor tidak valid!");
+        }
+    }
+
+    private static void daftarkanPesertaKeTurnamen() {
+        System.out.println("\n=== DAFTARKAN PESERTA KE TURNAMEN ===");
+
+        if (semuaTurnamen.isEmpty()) {
+            System.out.println("Belum ada turnamen!");
+            return;
+        }
+
+        if (semuaPeserta.isEmpty()) {
+            System.out.println("Belum ada peserta!");
+            return;
+        }
+
+        // Pilih turnamen
+        System.out.println("Pilih Turnamen:");
+        tampilkanTurnamen();
+        System.out.print("Pilihan: ");
+        int pilihTurnamen = Integer.parseInt(scanner.nextLine()) - 1;
+
+        if (pilihTurnamen < 0 || pilihTurnamen >= semuaTurnamen.size()) {
+            System.out.println("Pilihan tidak valid!");
+            return;
+        }
+
+        // Pilih peserta
+        System.out.println("\nPilih Peserta:");
+        tampilkanPeserta();
+        System.out.print("Pilihan: ");
+        int pilihPeserta = Integer.parseInt(scanner.nextLine()) - 1;
+
+        if (pilihPeserta < 0 || pilihPeserta >= semuaPeserta.size()) {
+            System.out.println("Pilihan tidak valid!");
+            return;
+        }
+
+        Turnamen turnamen = semuaTurnamen.get(pilihTurnamen);
+        Peserta peserta = semuaPeserta.get(pilihPeserta);
+
+        if (turnamen.daftarkanPeserta(peserta)) {
+            System.out.println("Peserta " + peserta.getNama() +
+                    " berhasil didaftarkan ke turnamen " + turnamen.getNama());
+        } else {
+            System.out.println("Peserta sudah terdaftar di turnamen ini!");
+        }
+    }
+
+    private static void hapusPesertaDariTurnamen() {
+        System.out.println("\n=== HAPUS PESERTA DARI TURNAMEN ===");
+
+        if (semuaTurnamen.isEmpty()) {
+            System.out.println("Belum ada turnamen!");
+            return;
+        }
+
+        // Pilih turnamen
+        System.out.println("Pilih Turnamen:");
+        tampilkanTurnamen();
+        System.out.print("Pilihan: ");
+        int pilihTurnamen = Integer.parseInt(scanner.nextLine()) - 1;
+
+        if (pilihTurnamen < 0 || pilihTurnamen >= semuaTurnamen.size()) {
+            System.out.println("Pilihan tidak valid!");
+            return;
+        }
+
+        Turnamen turnamen = semuaTurnamen.get(pilihTurnamen);
+
+        if (turnamen.getDaftarPeserta().isEmpty()) {
+            System.out.println("Tidak ada peserta di turnamen ini!");
+            return;
+        }
+
+        System.out.println("\nPeserta di turnamen " + turnamen.getNama() + ":");
+        List<Peserta> pesertaTurnamen = turnamen.getDaftarPeserta();
+        for (int i = 0; i < pesertaTurnamen.size(); i++) {
+            System.out.println((i+1) + ". " + pesertaTurnamen.get(i).getNama());
+        }
+
+        System.out.print("Pilih peserta yang akan dihapus: ");
+        int pilihPeserta = Integer.parseInt(scanner.nextLine()) - 1;
+
+        if (pilihPeserta >= 0 && pilihPeserta < pesertaTurnamen.size()) {
+            String idPeserta = pesertaTurnamen.get(pilihPeserta).getId();
+            if (turnamen.hapusPeserta(idPeserta)) {
+                System.out.println("Peserta berhasil dihapus dari turnamen!");
+            }
+        } else {
+            System.out.println("Pilihan tidak valid!");
+        }
+    }
+
+    private static void tampilkanTurnamen() {
+        System.out.println("\n=== DAFTAR TURNAMEN ===");
+        for (int i = 0; i < semuaTurnamen.size(); i++) {
+            System.out.print((i+1) + ". ");
+            semuaTurnamen.get(i).tampilkanInfo();
+        }
+    }
+
+    private static void menuKontrolTurnamen() {
+        System.out.println("\n=== KONTROL TURNAMEN ===");
+
+        if (semuaTurnamen.isEmpty()) {
+            System.out.println("Belum ada turnamen!");
+            return;
+        }
+
+        // Pilih turnamen
+        System.out.println("Pilih Turnamen:");
+        tampilkanTurnamen();
+        System.out.print("Pilihan: ");
+        int pilihTurnamen = Integer.parseInt(scanner.nextLine()) - 1;
+
+        if (pilihTurnamen < 0 || pilihTurnamen >= semuaTurnamen.size()) {
+            System.out.println("Pilihan tidak valid!");
+            return;
+        }
+
+        Turnamen turnamen = semuaTurnamen.get(pilihTurnamen);
+
+        System.out.println("\nStatus saat ini: " + turnamen.getStatus());
+        System.out.println("1. Mulai Turnamen");
+        System.out.println("2. Selesaikan Turnamen");
+        System.out.print("Pilihan: ");
+
+        int pilihan = Integer.parseInt(scanner.nextLine());
+
+        switch (pilihan) {
+            case 1:
+                turnamen.mulaiTurnamen();
+                System.out.println("Turnamen " + turnamen.getNama() + " telah dimulai!");
+                break;
+            case 2:
+                if (!turnamen.getStatus().equals("BERLANGSUNG")) {
+                    System.out.println("Turnamen belum dimulai!");
+                    return;
+                }
+
+                if (turnamen.getDaftarPeserta().isEmpty()) {
+                    System.out.println("Tidak ada peserta di turnamen ini!");
+                    return;
+                }
+
+                System.out.println("\nPilih Pemenang:");
+                List<Peserta> peserta = turnamen.getDaftarPeserta();
+                for (int i = 0; i < peserta.size(); i++) {
+                    System.out.println((i+1) + ". " + peserta.get(i).getNama());
+                }
+                System.out.print("Pilihan: ");
+                int pilihPemenang = Integer.parseInt(scanner.nextLine()) - 1;
+
+                if (pilihPemenang >= 0 && pilihPemenang < peserta.size()) {
+                    String idPemenang = peserta.get(pilihPemenang).getId();
+                    turnamen.selesaikanTurnamen(idPemenang);
+                    System.out.println("Turnamen selesai! Pemenang: " + peserta.get(pilihPemenang).getNama());
+                } else {
+                    System.out.println("Pilihan tidak valid!");
+                }
+                break;
+            default:
+                System.out.println("Pilihan tidak valid!");
+        }
+    }
+
+    private static void tampilkanBracketMenu() {
+        System.out.println("\n=== TAMPILKAN BRACKET ===");
+
+        if (semuaTurnamen.isEmpty()) {
+            System.out.println("Belum ada turnamen!");
+            return;
+        }
+
+        // Pilih turnamen
+        System.out.println("Pilih Turnamen:");
+        tampilkanTurnamen();
+        System.out.print("Pilihan: ");
+        int pilihTurnamen = Integer.parseInt(scanner.nextLine()) - 1;
+
+        if (pilihTurnamen < 0 || pilihTurnamen >= semuaTurnamen.size()) {
+            System.out.println("Pilihan tidak valid!");
+            return;
+        }
+
+        Turnamen turnamen = semuaTurnamen.get(pilihTurnamen);
+        turnamen.tampilkanBracket();
+    }
+}
