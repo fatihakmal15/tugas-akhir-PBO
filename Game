@@ -1,0 +1,27 @@
+public class Game {
+    private String nama;
+    private String genre;
+    private int maxPemain;
+    private String tipeTurnamen;
+
+    public Game(String nama, String genre, int maxPemain, String tipeTurnamen) {
+        this.nama = nama;
+        this.genre = genre;
+        this.maxPemain = maxPemain;
+        this.tipeTurnamen = tipeTurnamen;
+    }
+
+    public String getNama() { return nama; }
+    public String getGenre() { return genre; }
+    public int getMaxPemain() { return maxPemain; }
+    public String getTipeTurnamen() { return tipeTurnamen; }
+
+    public void tampilkanInfo() {
+        System.out.println("=========================================");
+        System.out.println("Nama Game    : " + nama);
+        System.out.println("Genre        : " + genre);
+        System.out.println("Max Pemain   : " + maxPemain + " orang");
+        System.out.println("Tipe Turnamen: " + tipeTurnamen);
+        System.out.println("=========================================");
+    }
+}
